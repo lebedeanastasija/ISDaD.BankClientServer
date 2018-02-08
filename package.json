@@ -1,0 +1,29 @@
+{
+  "name": "BankClientSystem",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "dependencies": {
+    "body-parser": "^1.17.2",
+    "express": "^4.15.4",
+    "mysql2": "^1.4.1",
+    "sequelize": "^4.5.0",
+    "lodash": "~4.17.4"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js",
+    "stop": "pkill --signal SIGINT electronic_diary"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lebedeanastasija/ISDaD.BankClientSystem.git"
+  },
+  "author": "nastya",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/lebedeanastasija/ISDaD.BankClientSystem/issues"
+  },
+  "homepage": "https://github.com/lebedeanastasija/ISDaD.BankClientSystem#readme"
+}
