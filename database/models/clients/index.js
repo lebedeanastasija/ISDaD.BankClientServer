@@ -86,7 +86,7 @@ const Client = sequelize.define('client', {
 	},
     maritalStatus: {
 		type: Sequelize.INTEGER,
-		field: 'marital_status',
+		field: 'marital_status_id',
 		allowNull: false
 	},
     citizenship: {
@@ -118,9 +118,9 @@ const Client = sequelize.define('client', {
 });
 
 Client.belongsTo(City, { foreignKey: 'residence_city'});
-Client.belongsTo(MaritalStatus, { foreignKey: 'marital_status'});
+Client.belongsTo(MaritalStatus, { foreignKey: 'marital_status_id'});
 Client.belongsTo(Country, { foreignKey: 'citizenship'});
 Client.belongsTo(DisabilityGroup, { foreignKey: 'disability'});
 
 
-module.exports = Pupil;
+module.exports = Client;

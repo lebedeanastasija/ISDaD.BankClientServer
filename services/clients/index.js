@@ -1,6 +1,6 @@
-
+const Client = require('../../database/models/clients');
 function getAll() {
-	return Client.findAll({attributes: ['id', 'name', 'surname', 'patronymic']})
+	return Client.findAll({})
 	.catch(err => Promise.reject({status: 500, message: err.message}));
 }
 
@@ -10,7 +10,8 @@ function getById(id) {
 }
 
 function create(name, surname, patronymic) {
-	if(!uid || !name || !surname) {
+	console.log('[Create]');
+	if(!name || !surname || !patronymic) {
 		return Promise.reject({status: 400, message: 'Invalid client data'});
 	}
 

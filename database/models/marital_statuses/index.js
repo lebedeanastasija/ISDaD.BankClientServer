@@ -23,7 +23,4 @@ const MaritalStatus = sequelize.define('marital_status', {
     updatedAt: false,
 });
 
-/*
-Class.belongsTo(Teacher, { foreignKey: 'teacher_id' });*/
-
 module.exports = MaritalStatus;
