@@ -9,14 +9,17 @@ function getById(id) {
 	.catch(() => Promise.reject({status: 500, message: 'Error occured'}));
 }
 
-function create(name, surname, patronymic) {
-	console.log('[Create]');
-	if(!name || !surname || !patronymic) {
+function create(client) {
+	console.log('[Create pupil]');
+	if(!client.surname || !client.name || !client.patronymic || !client.birthDate || !client.gender ||
+        !client.passportSeries || !client.passportNumber || !client.issuingAuthority || !client.issueDate ||
+        !client.identificationNumber || !client.birthPlace || !client.residenceAddress || !client.maritalStatusId ||
+        !client.citizenship || !client.disability || !client.isRetired || !client.isReservist) {
 		return Promise.reject({status: 400, message: 'Invalid client data'});
 	}
 
 	return new Promise((resolve, reject) => {
-		Client.create({name, surname, patronymic})
+		Client.create(client)
 		.then(clientResult => {
 			const result = Object.assign({}, clientResult.dataValues);
 			resolve(result);

@@ -24,7 +24,7 @@ router.get('/:id', (req, res, next) => {
 	if(!id) {
 		res.status(400);
 		return res.json({
-			data: "Invalid pupil"
+			data: "Invalid client"
 		});
 	}
 
@@ -44,60 +44,63 @@ router.get('/:id', (req, res, next) => {
 });
 
 router.post('/', (req, res, next) => {
-    let surname = req.body.surname;
-	let name = req.body.name;
-	let patronymic = req.body.patronymic;
-	let birthDate = req.body.birthDate;
-	let gender = req.body.gender;
-	let passportSeries = req.body.passportSeries;
-	let passportNumber = req.body.passportNumber;
-	let issuingAuthority = req.body.issuingAuthority;
-	let issueDate = req.body.issueDate;
-	let identificationNumber = req.body.identificationNumber;
-	let birthPlace = req.body.birthPlace;
-	let residenceAddress = req.body.residenceAddress;
-    let maritalStatusId = req.body.maritalStatusId;
-    let citizenship = req.body.citizenship;
-    let disability = req.body.disability;
-    let isRetired = req.body.isRetired;
-    let isReservist = req.body.isReservist;
-    //can be null:
-	let homePhoneNumber = req.body.homePhoneNumber;
-	let mobilePhoneNumber = req.body.mobilePhoneNumber;
-	let email = req.body.email;
-    let monthlyIncome = req.body.monthlyIncome;
+	const CLIENT = {
+      	surname: req.body.surname,
+      	name: req.body.name,
+	  	patronymic: req.body.patronymic,
+	  	birthDate: req.body.birthDate,
+		gender: req.body.gender,
+		passportSeries: req.body.passportSeries,
+		passportNumber: req.body.passportNumber,
+		issuingAuthority: req.body.issuingAuthority,
+		issueDate: req.body.issueDate,
+		identificationNumber: req.body.identificationNumber,
+		birthPlace: req.body.birthPlace,
+		residenceAddress: req.body.residenceAddress,
+		maritalStatusId: req.body.maritalStatusId,
+		citizenship: req.body.citizenship,
+		disability: req.body.disability,
+		isRetired: req.body.isRetired,
+		isReservist: req.body.isReservist,
+		// can be null:
+		homePhoneNumber: req.body.homePhoneNumber,
+		mobilePhoneNumber: req.body.mobilePhoneNumber,
+		email: req.body.email,
+		monthlyIncome: req.body.monthlyIncome
+	};
 
-	if( !surname || !name || !patronymic || !birthDate || !gender || !passportSeries || !passportNumber ||
-		!issuingAuthority || !issueDate || !identificationNumber || !birthPlace || !residenceAddress ||
-		!maritalStatusId || !citizenship || !disability || !isRetired || !isReservist) {
+	if( !CLIENT.surname || !CLIENT.name || !CLIENT.patronymic || !CLIENT.birthDate || !CLIENT.gender ||
+		!CLIENT.passportSeries || !CLIENT.passportNumber || !CLIENT.issuingAuthority || !CLIENT.issueDate ||
+		!CLIENT.identificationNumber || !CLIENT.birthPlace || !CLIENT.residenceAddress || !CLIENT.maritalStatusId ||
+		!CLIENT.citizenship || !CLIENT.disability || !CLIENT.isRetired || !CLIENT.isReservist) {
 		res.status(400);
 		return res.json({
 			data: {
 				message: 'Invalid client data',
 				invalidFields: {
-                    surname: !surname,
-                    name: !name,
-                    patronymic: !patronymic,
-                    birthDate: !birthDate,
-                    gender: !gender,
-                    passportSeries: !passportSeries,
-                    passportNumber: !passportNumber,
-                    issuingAuthority: !issuingAuthority,
-                    issueDate: !issueDate,
-                    identificationNumber: !identificationNumber,
-                    birthPlace: !birthPlace,
-                    residenceAddress: !residenceAddress,
-                    maritalStatusId: !maritalStatusId,
-                    citizenship: !citizenship,
-                    disability: !disability,
-                    isRetired: !isRetired,
-                    isReservist: !isReservist
+                    surname: !CLIENT.surname,
+                    name: !CLIENT.name,
+                    patronymic: !CLIENT.patronymic,
+                    birthDate: !CLIENT.birthDate,
+                    gender: !CLIENT.gender,
+                    passportSeries: !CLIENT.passportSeries,
+                    passportNumber: !CLIENT.passportNumber,
+                    issuingAuthority: !CLIENT.issuingAuthority,
+                    issueDate: !CLIENT.issueDate,
+                    identificationNumber: !CLIENT.identificationNumber,
+                    birthPlace: !CLIENT.birthPlace,
+                    residenceAddress: !CLIENT.residenceAddress,
+                    maritalStatusId: !CLIENT.maritalStatusId,
+                    citizenship: !CLIENT.citizenship,
+                    disability: !CLIENT.disability,
+                    isRetired: !CLIENT.isRetired,
+                    isReservist: !CLIENT.isReservist
 				}
 			}
 		});
 	}
 
-    clientsService.create(name, surname, patronymic)
+    clientsService.create(CLIENT)
 	.then(data => {
 		res.status(200);
 		res.json({
