@@ -44,35 +44,37 @@ router.get('/:id', (req, res, next) => {
 });
 
 router.post('/', (req, res, next) => {
-	const CLIENT = {
-      	surname: req.body.surname,
-      	name: req.body.name,
-	  	patronymic: req.body.patronymic,
-	  	birthDate: req.body.birthDate,
-		gender: req.body.gender,
-		passportSeries: req.body.passportSeries,
-		passportNumber: req.body.passportNumber,
-		issuingAuthority: req.body.issuingAuthority,
-		issueDate: req.body.issueDate,
-		identificationNumber: req.body.identificationNumber,
-		birthPlace: req.body.birthPlace,
-		residenceAddress: req.body.residenceAddress,
-		maritalStatusId: req.body.maritalStatusId,
-		citizenship: req.body.citizenship,
-		disability: req.body.disability,
-		isRetired: req.body.isRetired,
-		isReservist: req.body.isReservist,
-		// can be null:
-		homePhoneNumber: req.body.homePhoneNumber,
-		mobilePhoneNumber: req.body.mobilePhoneNumber,
-		email: req.body.email,
-		monthlyIncome: req.body.monthlyIncome
-	};
+    const CLIENT = {
+        surname: req.body.surname.trim(),
+        name: req.body.name.trim(),
+        patronymic: req.body.patronymic.trim(),
+        birthDate: req.body.birthDate.trim(),
+        gender: req.body.gender.trim(),
+        passportSeries: req.body.passportSeries.trim(),
+        passportNumber: req.body.passportNumber.trim(),
+        issuingAuthority: req.body.issuingAuthority.trim(),
+        issueDate: req.body.issueDate.trim(),
+        identificationNumber: req.body.identificationNumber.trim(),
+        birthPlace: req.body.birthPlace.trim(),
+        residenceCity: req.body.residenceCity,
+        residenceAddress: req.body.residenceAddress.trim(),
+        maritalStatusId: req.body.maritalStatusId,
+        citizenship: req.body.citizenship,
+        disability: req.body.disability,
+        isRetired: req.body.isRetired,
+        isReservist: req.body.isReservist,
+        // can be null:
+        homePhoneNumber: req.body.homePhoneNumber && req.body.homePhoneNumber.trim(),
+        mobilePhoneNumber: req.body.mobilePhoneNumber && req.body.mobilePhoneNumber.trim(),
+        email: req.body.email && req.body.email.trim(),
+        monthlyIncome: req.body.monthlyIncome
+    };
 
 	if( !CLIENT.surname || !CLIENT.name || !CLIENT.patronymic || !CLIENT.birthDate || !CLIENT.gender ||
 		!CLIENT.passportSeries || !CLIENT.passportNumber || !CLIENT.issuingAuthority || !CLIENT.issueDate ||
-		!CLIENT.identificationNumber || !CLIENT.birthPlace || !CLIENT.residenceAddress || !CLIENT.maritalStatusId ||
-		!CLIENT.citizenship || !CLIENT.disability || !CLIENT.isRetired || !CLIENT.isReservist) {
+		!CLIENT.identificationNumber || !CLIENT.birthPlace || CLIENT.residenceCity === undefined ||
+        !CLIENT.residenceAddress || CLIENT.maritalStatusId === undefined || CLIENT.citizenship === undefined ||
+        CLIENT.disability === undefined || !(typeof CLIENT.isRetired === "boolean") || !(typeof CLIENT.isReservist === "boolean")) {
 		res.status(400);
 		return res.json({
 			data: {
@@ -89,12 +91,13 @@ router.post('/', (req, res, next) => {
                     issueDate: !CLIENT.issueDate,
                     identificationNumber: !CLIENT.identificationNumber,
                     birthPlace: !CLIENT.birthPlace,
+                    residenceCity: !Number.isInteger(CLIENT.residenceCity),
                     residenceAddress: !CLIENT.residenceAddress,
-                    maritalStatusId: !CLIENT.maritalStatusId,
-                    citizenship: !CLIENT.citizenship,
-                    disability: !CLIENT.disability,
-                    isRetired: !CLIENT.isRetired,
-                    isReservist: !CLIENT.isReservist
+                    maritalStatusId: !Number.isInteger(CLIENT.maritalStatusId),
+                    citizenship: !Number.isInteger(CLIENT.citizenship),
+                    disability: !Number.isInteger(CLIENT.disability),
+                    isRetired: !(typeof CLIENT.isRetired === "boolean"),
+                    isReservist: !(typeof CLIENT.isReservist === "boolean")
 				}
 			}
 		});
@@ -113,6 +116,85 @@ router.post('/', (req, res, next) => {
 			data: err.message
 		});
 	});
+});
+
+router.post('/:id', (req, res, next) => {
+    const CLIENT_ID = req.params.id;
+    console.log("empty surname length: ", req.body.surname);
+    console.log("trimed surname length: ", req.body.surname.trim().length);
+    const CLIENT = {
+        surname: req.body.surname.trim(),
+        name: req.body.name.trim(),
+        patronymic: req.body.patronymic.trim(),
+        birthDate: req.body.birthDate.trim(),
+        gender: req.body.gender.trim(),
+        passportSeries: req.body.passportSeries.trim(),
+        passportNumber: req.body.passportNumber.trim(),
+        issuingAuthority: req.body.issuingAuthority.trim(),
+        issueDate: req.body.issueDate.trim(),
+        identificationNumber: req.body.identificationNumber.trim(),
+        birthPlace: req.body.birthPlace.trim(),
+        residenceCity: req.body.residenceCity,
+        residenceAddress: req.body.residenceAddress.trim(),
+        maritalStatusId: req.body.maritalStatusId,
+        citizenship: req.body.citizenship,
+        disability: req.body.disability,
+        isRetired: req.body.isRetired,
+        isReservist: req.body.isReservist,
+        // can be null:
+        homePhoneNumber: req.body.homePhoneNumber.trim(),
+        mobilePhoneNumber: req.body.mobilePhoneNumber.trim(),
+        email: req.body.email.trim(),
+        monthlyIncome: req.body.monthlyIncome
+    };
+
+    if( !CLIENT.surname || !CLIENT.name || !CLIENT.patronymic || !CLIENT.birthDate || !CLIENT.gender ||
+        !CLIENT.passportSeries || !CLIENT.passportNumber || !CLIENT.issuingAuthority || !CLIENT.issueDate ||
+        !CLIENT.identificationNumber || !CLIENT.birthPlace || !Number.isInteger(CLIENT.residenceCity) ||
+        !CLIENT.residenceAddress || !Number.isInteger(CLIENT.maritalStatusId) || !Number.isInteger(CLIENT.citizenship) ||
+        !Number.isInteger(CLIENT.disability) || !(typeof CLIENT.isRetired === "boolean") || !(typeof CLIENT.isReservist === "boolean")) {
+        res.status(400);
+        return res.json({
+            data: {
+                message: 'Invalid client data',
+                invalidFields: {
+                    surname: !CLIENT.surname,
+                    name: !CLIENT.name,
+                    patronymic: !CLIENT.patronymic,
+                    birthDate: !CLIENT.birthDate,
+                    gender: !CLIENT.gender,
+                    passportSeries: !CLIENT.passportSeries,
+                    passportNumber: !CLIENT.passportNumber,
+                    issuingAuthority: !CLIENT.issuingAuthority,
+                    issueDate: !CLIENT.issueDate,
+                    identificationNumber: !CLIENT.identificationNumber,
+                    birthPlace: !CLIENT.birthPlace,
+                    residenceCity: !Number.isInteger(CLIENT.residenceCity),
+                    residenceAddress: !CLIENT.residenceAddress,
+                    maritalStatusId: !Number.isInteger(CLIENT.maritalStatusId),
+                    citizenship: !Number.isInteger(CLIENT.citizenship),
+                    disability: !Number.isInteger(CLIENT.disability),
+                    isRetired: !(typeof CLIENT.isRetired === "boolean"),
+                    isReservist: !(typeof CLIENT.isReservist === "boolean")
+                }
+            }
+        });
+    }
+
+    clientsService.update({ id: CLIENT_ID }, CLIENT)
+    .then(data => {
+        console.log("Updated pupil: ", data);
+        res.status(200);
+        res.json({
+            data
+        });
+    })
+    .catch(err => {
+        res.status(err.status);
+        res.json({
+            data: err.message
+        });
+    });
 });
 
 router.delete('/:id', (req, res, next) => {
